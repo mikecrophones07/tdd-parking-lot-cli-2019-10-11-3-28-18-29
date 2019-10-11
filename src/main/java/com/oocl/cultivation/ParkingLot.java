@@ -20,7 +20,9 @@ public class ParkingLot {
     }
 
     public Car fetch(ParkingTicket ticket) {
-        return cars.get(ticket);
+        Car car = cars.get(ticket);
+        cars.remove(ticket);
+        return car;
     }
 
     public void park(Car car, ParkingTicket parkingTicket) {

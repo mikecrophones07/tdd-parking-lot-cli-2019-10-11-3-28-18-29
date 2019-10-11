@@ -6,6 +6,8 @@ import com.oocl.cultivation.ParkingLot;
 import com.oocl.cultivation.ParkingTicket;
 import org.junit.jupiter.api.Test;
 
+import java.util.stream.IntStream;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class ParkingBoyFacts {
@@ -68,5 +70,31 @@ class ParkingBoyFacts {
 
         Car fetchCar = parkingBoy.fetch(wrongTicket);
         assertNull(fetchCar);
+    }
+
+    @Test
+    void should_fetch_null_car_when_ticket_was_already_used() {
+        ParkingLot parkingLot = new ParkingLot();
+        ParkingBoy parkingBoy = new ParkingBoy(parkingLot);
+        Car car = new Car();
+
+        ParkingTicket parkingTicket = parkingBoy.park(car);
+        Car fetchCar = parkingBoy.fetch(parkingTicket);
+        Car fetchCar2 = parkingBoy.fetch(parkingTicket);
+        assertNull(fetchCar2);
+    }
+
+    @Test
+    void should_not_park_in_the_parking_lot_when_parking_lot_is_full() {
+        ParkingLot parkingLot = new ParkingLot();
+        ParkingBoy parkingBoy = new ParkingBoy(parkingLot);
+
+        IntStream.rangeClosed(0, 10).forEach(value -> {
+            Car car = new Car();
+            ParkingTicket parkingTicket = parkingBoy.park(car);
+        });
+        Car car = new Car();
+        ParkingTicket parkingTicket = parkingBoy.park(car);
+        assertNull(parkingTicket);
     }
 }
