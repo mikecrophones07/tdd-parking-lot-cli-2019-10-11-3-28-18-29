@@ -6,6 +6,7 @@ import com.oocl.cultivation.ParkingLot;
 import com.oocl.cultivation.ParkingTicket;
 import org.junit.jupiter.api.Test;
 
+import java.util.FormatFlagsConversionMismatchException;
 import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -96,5 +97,47 @@ class ParkingBoyFacts {
         Car car = new Car();
         ParkingTicket parkingTicket = parkingBoy.park(car);
         assertNull(parkingTicket);
+    }
+
+    @Test
+    void should_return_msg_unrecognized_parking_ticket_when_invalid_ticket_is_given_to_parking_boy() {
+        String expectedString = "Unrecognized parking ticket.";
+        Car car = new Car();
+        ParkingLot parkingLot = new ParkingLot();
+        ParkingBoy parkingBoy = new ParkingBoy(parkingLot);
+        ParkingTicket parkingTicket = parkingBoy.park(car);
+        Car fetchCar = parkingBoy.fetch(null);
+
+        String actualString = parkingBoy.getMessage();
+        assertEquals(actualString, expectedString);
+    }
+
+    @Test
+    void should_return_provide_ticket_message_when_null_ticket_is_given_to_parking_boy() {
+        String expectedString = "Please provide your parking ticket.";
+        Car car = new Car();
+        ParkingLot parkingLot = new ParkingLot();
+        ParkingBoy parkingBoy = new ParkingBoy(parkingLot);
+        ParkingTicket parkingTicket = parkingBoy.park(car);
+        Car fetchCar = parkingBoy.fetch(null);
+
+        String actualString = parkingBoy.getMessage();
+        assertEquals(actualString, expectedString);
+    }
+
+    @Test
+    void should_return_not_ebough_parking_position_message_when_parking_availability_is_full() {
+        String expectedString = "Not enough position.";
+        ParkingLot parkingLot = new ParkingLot();
+        ParkingBoy parkingBoy = new ParkingBoy(parkingLot);
+        IntStream.rangeClosed(0, 10).forEach(value -> {
+            Car car = new Car();
+            ParkingTicket parkingTicket = parkingBoy.park(car);
+        });
+        Car car = new Car();
+        ParkingTicket parkingTicket = parkingBoy.park(car);
+
+        String actualString = parkingBoy.getMessage();
+        assertEquals(actualString, expectedString);
     }
 }
