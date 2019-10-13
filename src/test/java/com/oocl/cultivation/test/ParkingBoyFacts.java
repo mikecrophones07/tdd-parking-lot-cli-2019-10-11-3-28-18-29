@@ -119,7 +119,7 @@ class ParkingBoyFacts {
         ParkingLot parkingLot = new ParkingLot();
         ParkingBoy parkingBoy = new ParkingBoy(parkingLot);
         ParkingTicket parkingTicket = parkingBoy.park(car);
-        Car fetchCar = parkingBoy.fetch(null);
+        Car fetchCar = parkingBoy.fetch(new ParkingTicket());
 
         String actualString = parkingBoy.getMessage();
         assertEquals(actualString, expectedString);

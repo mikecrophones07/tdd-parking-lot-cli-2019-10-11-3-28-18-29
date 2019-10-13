@@ -22,11 +22,15 @@ public class ParkingBoy {
     }
 
     public Car fetch(ParkingTicket ticket) {
-        Car car = parkingLot.fetch(ticket);
-        if(Objects.nonNull(car)){
-            return car;
+        if(Objects.nonNull(ticket)) {
+            Car car = parkingLot.fetch(ticket);
+            if (Objects.nonNull(car)) {
+                return car;
+            }
+            message = "Please provide your parking ticket.";
+            return null;
         }
-        message = Objects.nonNull(ticket)? "Unrecognized parking ticket.":"Please provide your parking ticket.";
+        message = "Unrecognized parking ticket.";
         return null;
     }
 
