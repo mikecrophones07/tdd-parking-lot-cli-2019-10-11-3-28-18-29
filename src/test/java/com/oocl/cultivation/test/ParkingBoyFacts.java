@@ -1,9 +1,6 @@
 package com.oocl.cultivation.test;
 
-import com.oocl.cultivation.Car;
-import com.oocl.cultivation.ParkingBoy;
-import com.oocl.cultivation.ParkingLot;
-import com.oocl.cultivation.ParkingTicket;
+import com.oocl.cultivation.*;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Array;
@@ -155,5 +152,32 @@ class ParkingBoyFacts {
         ParkingTicket ticket = parkingBoy.park(car);
         Car fetchCar = parkingBoy.fetch(ticket);
         assertEquals(fetchCar, car);
+    }
+
+    @Test
+    void should_park_car_to_more_spacious_parking_lot_when_smart_parking_boy_park_the_car() {
+        ParkingLot currentParkingLot = new ParkingLot();
+        ParkingLot expectedParkingLot = new ParkingLot();
+        ParkingBoy parkingBoy = new ParkingBoy(Arrays.asList(currentParkingLot, expectedParkingLot));
+        SmartParkingBoy smartParkingBoy = new SmartParkingBoy(parkingBoy);
+        IntStream.rangeClosed(0, 4).forEach(value -> {
+            Car car = new Car();
+            ParkingTicket parkingTicket = parkingBoy.park(car);
+        });
+
+        IntStream.rangeClosed(0, 4).forEach(value -> {
+            Car car = new Car();
+            ParkingTicket parkingTicket = smartParkingBoy.park(car);
+        });
+
+        Car car = new Car();
+        ParkingTicket parkingTicket = smartParkingBoy.park(car);
+        ParkingLot actualParkingLot = smartParkingBoy.getCurrentParkingLot(parkingTicket);
+        assertEquals(actualParkingLot, currentParkingLot);
+
+        car = new Car();
+        parkingTicket = smartParkingBoy.park(car);
+        actualParkingLot = smartParkingBoy.getCurrentParkingLot(parkingTicket);
+        assertEquals(actualParkingLot, expectedParkingLot);
     }
 }

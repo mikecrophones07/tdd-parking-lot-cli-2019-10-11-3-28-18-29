@@ -6,10 +6,23 @@ import java.util.Objects;
 public class ParkingBoy {
 
     private final List<ParkingLot> parkingLotList;
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
     private String message;
 
     public ParkingBoy(List<ParkingLot> parkingLotList) {
         this.parkingLotList = parkingLotList;
+    }
+
+    public String getMessage() {
+        return this.message;
+    }
+
+    protected List<ParkingLot> getParkingLots() {
+        return this.parkingLotList;
     }
 
     public ParkingTicket park(Car car) {
@@ -44,7 +57,5 @@ public class ParkingBoy {
         return parkingLot.findCar(ticket);
     }
 
-    public String getMessage() {
-        return this.message;
-    }
+
 }
