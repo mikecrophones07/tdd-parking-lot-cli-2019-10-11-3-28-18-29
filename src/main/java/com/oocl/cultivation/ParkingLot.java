@@ -2,6 +2,7 @@ package com.oocl.cultivation;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class ParkingLot {
     private final int capacity;
@@ -27,5 +28,9 @@ public class ParkingLot {
 
     public void park(Car car, ParkingTicket parkingTicket) {
         cars.put(parkingTicket, car);
+    }
+
+    public boolean findCar(ParkingTicket ticket) {
+        return Objects.nonNull(cars.get(ticket));
     }
 }

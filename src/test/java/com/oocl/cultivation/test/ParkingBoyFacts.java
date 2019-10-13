@@ -6,7 +6,8 @@ import com.oocl.cultivation.ParkingLot;
 import com.oocl.cultivation.ParkingTicket;
 import org.junit.jupiter.api.Test;
 
-import java.util.FormatFlagsConversionMismatchException;
+import java.lang.reflect.Array;
+import java.util.*;
 import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -15,7 +16,7 @@ class ParkingBoyFacts {
     @Test
     void should_get_parking_ticket_when_parking_boy_park_in_parking_lot() {
         ParkingLot parkingLot = new ParkingLot();
-        ParkingBoy parkingBoy = new ParkingBoy(parkingLot);
+        ParkingBoy parkingBoy = new ParkingBoy(Collections.singletonList(parkingLot));
         Car car = new Car();
 
         ParkingTicket parkingTicket = parkingBoy.park(car);
@@ -26,7 +27,7 @@ class ParkingBoyFacts {
     void should_get_car_when_parking_ticket_is_back_to_parking_boy() {
         Car car = new Car();
         ParkingLot parkingLot = new ParkingLot();
-        ParkingBoy parkingBoy = new ParkingBoy(parkingLot);
+        ParkingBoy parkingBoy = new ParkingBoy(Collections.singletonList(parkingLot));
         ParkingTicket parkingTicket = parkingBoy.park(car);
 
         Car fetchCar = parkingBoy.fetch(parkingTicket);
@@ -38,7 +39,7 @@ class ParkingBoyFacts {
         Car car = new Car();
         Car car2 = new Car();
         ParkingLot parkingLot = new ParkingLot();
-        ParkingBoy parkingBoy = new ParkingBoy(parkingLot);
+        ParkingBoy parkingBoy = new ParkingBoy(Collections.singletonList(parkingLot));
         ParkingTicket parkingTicket = parkingBoy.park(car);
         ParkingTicket parkingTicket2 = parkingBoy.park(car2);
 
@@ -53,7 +54,7 @@ class ParkingBoyFacts {
     void should_fetch_right_car_using_corresponding_ticket() {
         Car car = new Car();
         ParkingLot parkingLot = new ParkingLot();
-        ParkingBoy parkingBoy = new ParkingBoy(parkingLot);
+        ParkingBoy parkingBoy = new ParkingBoy(Collections.singletonList(parkingLot));
         ParkingTicket parkingTicket = parkingBoy.park(car);
 
         Car fetchCar = parkingBoy.fetch(parkingTicket);
@@ -64,7 +65,7 @@ class ParkingBoyFacts {
     void should_fetch_null_car_when_wrong_ticket_is_presented() {
         Car car = new Car();
         ParkingLot parkingLot = new ParkingLot();
-        ParkingBoy parkingBoy = new ParkingBoy(parkingLot);
+        ParkingBoy parkingBoy = new ParkingBoy(Collections.singletonList(parkingLot));
         ParkingTicket parkingTicket = parkingBoy.park(car);
         ParkingTicket wrongTicket = new ParkingTicket();
 
@@ -76,7 +77,7 @@ class ParkingBoyFacts {
     @Test
     void should_fetch_null_car_when_ticket_was_already_used() {
         ParkingLot parkingLot = new ParkingLot();
-        ParkingBoy parkingBoy = new ParkingBoy(parkingLot);
+        ParkingBoy parkingBoy = new ParkingBoy(Collections.singletonList(parkingLot));
         Car car = new Car();
 
         ParkingTicket parkingTicket = parkingBoy.park(car);
@@ -88,7 +89,7 @@ class ParkingBoyFacts {
     @Test
     void should_not_park_in_the_parking_lot_when_parking_lot_is_full() {
         ParkingLot parkingLot = new ParkingLot();
-        ParkingBoy parkingBoy = new ParkingBoy(parkingLot);
+        ParkingBoy parkingBoy = new ParkingBoy(Collections.singletonList(parkingLot));
 
         IntStream.rangeClosed(0, 10).forEach(value -> {
             Car car = new Car();
@@ -104,7 +105,7 @@ class ParkingBoyFacts {
         String expectedString = "Unrecognized parking ticket.";
         Car car = new Car();
         ParkingLot parkingLot = new ParkingLot();
-        ParkingBoy parkingBoy = new ParkingBoy(parkingLot);
+        ParkingBoy parkingBoy = new ParkingBoy(Collections.singletonList(parkingLot));
         ParkingTicket parkingTicket = parkingBoy.park(car);
         Car fetchCar = parkingBoy.fetch(null);
 
@@ -117,7 +118,7 @@ class ParkingBoyFacts {
         String expectedString = "Please provide your parking ticket.";
         Car car = new Car();
         ParkingLot parkingLot = new ParkingLot();
-        ParkingBoy parkingBoy = new ParkingBoy(parkingLot);
+        ParkingBoy parkingBoy = new ParkingBoy(Collections.singletonList(parkingLot));
         ParkingTicket parkingTicket = parkingBoy.park(car);
         Car fetchCar = parkingBoy.fetch(new ParkingTicket());
 
@@ -129,7 +130,7 @@ class ParkingBoyFacts {
     void should_return_not_ebough_parking_position_message_when_parking_availability_is_full() {
         String expectedString = "Not enough position.";
         ParkingLot parkingLot = new ParkingLot();
-        ParkingBoy parkingBoy = new ParkingBoy(parkingLot);
+        ParkingBoy parkingBoy = new ParkingBoy(Arrays.asList(parkingLot));
         IntStream.rangeClosed(0, 10).forEach(value -> {
             Car car = new Car();
             ParkingTicket parkingTicket = parkingBoy.park(car);
@@ -139,5 +140,20 @@ class ParkingBoyFacts {
 
         String actualString = parkingBoy.getMessage();
         assertEquals(actualString, expectedString);
+    }
+
+    @Test
+    void should_park_to_parking_2_when_parking_lot_1_is_full() {
+        ParkingLot parkingLot = new ParkingLot();
+        ParkingLot parkingLot2 = new ParkingLot();
+        ParkingBoy parkingBoy = new ParkingBoy(Arrays.asList(parkingLot, parkingLot2));
+        IntStream.rangeClosed(0, 10).forEach(value -> {
+            Car car = new Car();
+            ParkingTicket parkingTicket = parkingBoy.park(car);
+        });
+        Car car = new Car();
+        ParkingTicket ticket = parkingBoy.park(car);
+        Car fetchCar = parkingBoy.fetch(ticket);
+        assertEquals(fetchCar, car);
     }
 }
